@@ -16,7 +16,7 @@ public class MyFrame extends JFrame {
 	private JButton _btn_erase;
 	private JButton _btn_dot;
 	private String _showStr = "";
-	private int _operand = 0;
+	private double _operand = 0;
 	private Font _font;
 	MyActionListener myListener = new MyActionListener();
 
@@ -101,6 +101,7 @@ public class MyFrame extends JFrame {
 	}
 
 	private int _sentenceNum = 0;
+	private Boolean _isPushSentence = false;
 
 	class MyActionListener implements ActionListener {
 
@@ -113,17 +114,21 @@ public class MyFrame extends JFrame {
 			if (e.getSource() == _btn_erase) {
 				_showStr = "";
 				_operand = 0;
+				_sentenceNum = 0;
+				_isPushSentence = false;
 			} else if (e.getSource() == _btn_dot) {
 				_showStr += ".";
 			} else if (e.getSource() == _btn_equal) {
-				// Calculate
+				_showStr = Calculate();
+				_sentenceNum = 0;
+				_isPushSentence = false;
 			} else {
 				for (int i = 0; i < 10; i++) {
 					if (e.getSource() == _btn_num[i]) {
-						if (_sentenceNum != 0) {
+						if (_isPushSentence) {
 							// 연산자를 눌렀다면
 							_showStr = "";
-							_sentenceNum = 0;
+							_isPushSentence = false;
 						}
 						_showStr += Integer.toString(i);
 						break;
@@ -131,12 +136,24 @@ public class MyFrame extends JFrame {
 				}
 				for (int i = 0; i < 4; i++) {
 					if (e.getSource() == _btn_sentence[i]) {
-						System.out.println("/*-");
-						_sentenceNum = i + 1;
-						if(_operand == 0) {
-							if(_showStr != "") {
+						// 숫자 입력을 안했을 경우
+						if (_showStr == "")
+							break;
+						_isPushSentence = true;
+
+						if (_operand == 0) {
+							// 피연산자 설정
+							if (_showStr.contains(".")) {
+								_operand = Double.parseDouble(_showStr);
+							} else {
 								_operand = Integer.parseInt(_showStr);
 							}
+							// 무슨 연산자를 눌렀나
+							_sentenceNum = i + 1;
+						} else {
+							_showStr = Calculate();
+							// 무슨 연산자를 눌렀나
+							_sentenceNum = i + 1;
 						}
 						break;
 					}
@@ -144,6 +161,25 @@ public class MyFrame extends JFrame {
 			}
 			_inputField.setText(_showStr);
 		}
+	}
 
+	private String Calculate() {
+		// 직접적인 계산
+		double num = Double.parseDouble(_showStr);
+		if (_sentenceNum == 1) {
+			_operand += num;
+		} else if (_sentenceNum == 2) {
+			_operand -= num;
+		} else if (_sentenceNum == 3) {
+			_operand *= num;
+		} else if (_sentenceNum == 4) {
+			_operand /= num;
+		}
+
+		// 정수형으로 출력할 수 있으면 정수형 출력
+		if (_operand == (int) _operand)
+			return Integer.toString((int) _operand);
+		else
+			return Double.toString(Math.round(_operand*100)/100.0);
 	}
 }
