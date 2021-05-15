@@ -12,6 +12,7 @@ public class MyFrame extends JFrame {
 	private JButton[] _btn_sentence;
 	private JButton _btn_equal;
 	private JButton _btn_erase;
+	private JButton _btn_dot;
 	public MyFrame() {
 		setSize(330, 350);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,6 +46,8 @@ public class MyFrame extends JFrame {
 		add(_btn_equal);
 		_btn_erase = new JButton("C");
 		add(_btn_erase);
+		_btn_dot = new JButton(".");
+		add(_btn_dot);
 	}
 
 	public void DrawFrame() {
@@ -61,9 +64,11 @@ public class MyFrame extends JFrame {
 				_btn_num[num++].setBounds(Side + btnWidth * x, btnHeight * y, btnWidth, btnHeight);
 			}
 		}
-		_btn_erase.setBounds(Side + btnWidth * 0, btnHeight * 4, btnWidth, btnHeight);
+		_btn_dot.setBounds(Side + btnWidth * 0, btnHeight * 4, btnWidth, btnHeight);
 		_btn_num[0].setBounds(Side + btnWidth * 1, btnHeight * 4, btnWidth, btnHeight);
 		_btn_equal.setBounds(Side + btnWidth * 2, btnHeight * 4, btnWidth, btnHeight);
+		
+		_btn_erase.setBounds(Side + btnWidth * 0, 0, btnWidth - 30, btnHeight - 30);
 		
 		for(int i = 0; i < 4; i++) {
 			_btn_sentence[i].setBounds(Side + btnWidth * 3, btnHeight * (i+1), btnWidth, btnHeight);
